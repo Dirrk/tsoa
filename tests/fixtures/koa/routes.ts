@@ -37,6 +37,7 @@ const models: any = {
     'publicStringProperty': { typeName: 'string', required: true },
     'optionalPublicStringProperty': { typeName: 'string', required: false },
     'stringProperty': { typeName: 'string', required: true },
+    'testDecorator': { typeName: 'string', required: false },
     'publicConstructorVar': { typeName: 'string', required: true },
     'optionalPublicConstructorVar': { typeName: 'string', required: false },
     'id': { typeName: 'number', required: true },

@@ -16,6 +16,8 @@ describe('Schema details generation', () => {
   if (!spec.info.version) { throw new Error('No spec info version.'); }
   if (!spec.host) { throw new Error('No host'); }
 
+  console.error(JSON.stringify(spec));
+
   it('should set API name if provided', () => expect(spec.info.title).to.equal(getDefaultOptions().name));
   it('should set API description if provided', () => expect(spec.info.description).to.equal(getDefaultOptions().description));
   it('should set API version if provided', () => expect(spec.info.version).to.equal(getDefaultOptions().version));

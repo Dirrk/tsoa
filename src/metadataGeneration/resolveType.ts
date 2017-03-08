@@ -1,5 +1,6 @@
 import * as ts from 'typescript';
-import { MetadataGenerator, Type, ReferenceType, Property } from './metadataGenerator';
+import { MetadataGenerator, Type, ReferenceType, Property, ArrayType } from './metadataGenerator';
+import { ValidationGenerator } from './validationGenerator';
 import * as _ from 'lodash';
 
 const syntaxKindMap: { [kind: number]: string } = {};
@@ -10,6 +11,7 @@ syntaxKindMap[ts.SyntaxKind.VoidKeyword] = 'void';
 
 const localReferenceTypeCache: { [typeName: string]: ReferenceType } = {};
 const inProgressTypes: { [typeName: string]: boolean } = {};
+const validationGenerator = new ValidationGenerator();
 
 type UsableDeclaration = ts.InterfaceDeclaration | ts.ClassDeclaration | ts.TypeAliasDeclaration;
 export function ResolveType(typeNode: ts.TypeNode): Type {
@@ -261,14 +263,55 @@ function getModelTypeProperties(node: UsableDeclaration, genericTypes?: ts.TypeN
       const identifier = declaration.name as ts.Identifier;
 
       if (!declaration.type) { throw new Error('No valid type found for property declaration.'); }
+      const decorators = getPropertyInfo(declaration);
 
+      const type = ResolveType(declaration.type);
+      let propType = '';
+
+      if (typeof type === 'string') {
+        propType = type;
+      } else if ((type as ArrayType).elementType) {
+        propType = 'array';
+      }
+
+      let metadata;
+      if (decorators && propType) {
+          metadata = validationGenerator.getProperties(decorators, propType);
+      }
       return {
         description: getNodeDescription(declaration),
+        metadata: metadata,
         name: identifier.text,
         required: !declaration.questionToken,
-        type: ResolveType(declaration.type)
+        type: type
       };
     });
+}
+
+function getPropertyInfo(prop: ts.PropertyDeclaration | ts.ParameterDeclaration) {
+  if (prop.decorators) {
+    console.error('I found a property with decorators!');
+    return prop.decorators
+      .map(d => d.expression as ts.CallExpression)
+      .map(e => {
+        let decoratorName = (e.expression as ts.Identifier).text;
+        let args = e.arguments.map((arg) => {
+          if (arg) {
+            return (arg as ts.Identifier).text;
+          }
+          return undefined;
+        })
+        .filter((val) => val !== undefined);
+        console.error('found decorator: ', decoratorName);
+        console.error('args: ', args);
+        return {
+          args: args,
+          name: decoratorName
+        };
+      });
+  } else {
+    return null;
+  }
 }
 
 function hasPublicModifier(node: ts.Node) {

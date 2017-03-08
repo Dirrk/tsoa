@@ -37,6 +37,7 @@ const models: any = {
     'publicStringProperty': { typeName: 'string', required: true },
     'optionalPublicStringProperty': { typeName: 'string', required: false },
     'stringProperty': { typeName: 'string', required: true },
+    'testDecorator': { typeName: 'string', required: false },
     'publicConstructorVar': { typeName: 'string', required: true },
     'optionalPublicConstructorVar': { typeName: 'string', required: false },
     'id': { typeName: 'number', required: true },
@@ -1296,8 +1297,8 @@ export function RegisterRoutes(server: hapi.Server) {
               'write:pets',
               'read:pets'
             ]
-          )        
-}
+          )
+        }
       ],
       handler: (request: any, reply) => {
         const args = {
@@ -1528,8 +1529,8 @@ export function RegisterRoutes(server: hapi.Server) {
       pre: [
         {
           method: authenticateMiddleware('api_key'
-          )        
-}
+          )
+        }
       ],
       handler: (request: any, reply) => {
         const args = {
@@ -1598,8 +1599,8 @@ export function RegisterRoutes(server: hapi.Server) {
               'write:pets',
               'read:pets'
             ]
-          )
-        }
+          )        
+}
       ],
       handler: (request: any, reply) => {
         const args = {

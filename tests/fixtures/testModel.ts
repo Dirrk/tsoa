@@ -1,3 +1,10 @@
+let fake = function fake(...values: string[]): any {
+  return () => { return; };
+};
+let fakeMe = function fake(a: number, ...values: string[]): any {
+  return () => { return; };
+};
+
 /**
  * This is a description of a model
  */
@@ -72,6 +79,9 @@ export class TestClassModel extends TestClassBaseModel {
   stringProperty: string;
   protected protectedStringProperty: string;
 
+  @fake()
+  @fakeMe(1)
+  public testDecorator?: string;
   /**
   * @param publicConstructorVar This is a description for publicConstructorVar
   */

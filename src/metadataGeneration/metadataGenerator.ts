@@ -1,5 +1,6 @@
 import * as ts from 'typescript';
 import { ControllerGenerator } from './controllerGenerator';
+import {PropertyMetadata} from '../interfaces/metadata';
 
 export class MetadataGenerator {
   public static current: MetadataGenerator;
@@ -121,6 +122,7 @@ export interface Property {
   name: string;
   type: Type;
   required: boolean;
+  metadata?: PropertyMetadata;
 }
 
 export interface ArrayType {

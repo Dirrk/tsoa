@@ -3,6 +3,7 @@ import { Metadata, Type, ArrayType, ReferenceType, PrimitiveType, Property, Meth
 import { Swagger } from './swagger';
 import * as fs from 'fs';
 import * as mkdirp from 'mkdirp';
+import * as _ from 'lodash';
 
 export class SpecGenerator {
   constructor(private readonly metadata: Metadata, private readonly config: SwaggerConfig) { }
@@ -175,6 +176,9 @@ export class SpecGenerator {
       const swaggerType = this.getSwaggerType(property.type);
       if (!swaggerType.$ref) {
         swaggerType.description = property.description;
+      }
+      if (property.metadata) {
+        _.assign(swaggerType, property.metadata);
       }
       swaggerProperties[property.name] = swaggerType;
     });

@@ -1,3 +1,5 @@
+import {PropertyMetadata} from '../interfaces/metadata';
+
 export namespace Swagger {
   export interface Info {
     title?: string;
@@ -107,26 +109,8 @@ export namespace Swagger {
     examples?: { [exampleName: string]: Example };
   }
 
-  export interface BaseSchema {
-    format?: string;
-    title?: string;
-    description?: string;
-    default?: string | boolean | number | Object;
-    multipleOf?: number;
-    maximum?: number;
-    exclusiveMaximum?: number;
-    minimum?: number;
-    exclusiveMinimum?: number;
-    maxLength?: number;
-    minLength?: number;
-    pattern?: string;
-    maxItems?: number;
-    minItems?: number;
-    uniqueItems?: boolean;
-    maxProperties?: number;
-    minProperties?: number;
+  export interface BaseSchema extends PropertyMetadata {
     enum?: [string | boolean | number | Object];
-    type?: string;
     items?: Schema | [Schema];
   }
 
